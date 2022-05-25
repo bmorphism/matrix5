@@ -1,0 +1,48 @@
+---
+version: "2.0"
+
+services:
+  conduit:
+    image: docker.io/matrixconduit/matrix-conduit:d8bebe44e2ea
+    expose:
+      - port: 6167
+        as: 6167
+        to:
+          - global: true
+  # proxy:
+  #   image: nginx
+  #   expose:
+  #     - port: 443
+  #       as: 443
+  #       to:
+  #         - global: true
+  #     # - port: 8448
+  #     #   as: 8448
+  #     #     - global: true
+profiles:
+  compute:
+    conduit3:
+      resources:
+        cpu:
+          units: 2
+        memory:
+          size: 1Gi
+        storage:
+          size: 1Gi
+  placement:
+    akash:
+      attributes:
+        host: akash
+      signedBy:
+        anyOf:
+          - "akash1365yvmc4s7awdyj3n2sav7xfx76adc6dnmlx63"
+      pricing:
+        conduit: 
+          denom: uakt
+          amount: 100000
+
+deployment:
+  conduit:
+    akash:
+      profile: conduit
+      count: 1
